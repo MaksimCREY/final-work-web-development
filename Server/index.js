@@ -16,14 +16,16 @@ app.get('/get',(req,res)=>{
     .catch(err=>res.json(err))
 })
 
-app.put('/update/:id',(req,res)=>{
-    const {id} = req.params;
-    console.log(id);
-    TodoModel.findByIdAndUpdate({_id: id},{done: true})
-    .then(result=>res.json(result))
-    .catch(err=>res.json(err))
+app.put('/update/:id', (req, res) => {
+    const { id } = req.params;
+    const { done } = req.body;
 
+    TodoModel.findByIdAndUpdate(id, { done: done }, { new: true })
+        .then(result => res.json(result))
+        .catch(err => res.json(err))
 })
+
+
 
 app.delete('/delete/:id',(req,res)=>{
     const {id}=req.params;

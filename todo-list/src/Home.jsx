@@ -16,23 +16,26 @@ function Home() {
             .catch(err => console.log(err))
     }
 
-    const handleEdit = (id) => {
+    const handleEdit = (id, currentDone) => {
+        console.log('Current done:', currentDone); // Добавленная строка
         const updatedTodos = todos.map(todo => {
             if (todo._id === id) {
-                return { ...todo, done: !todo.done }; // Изменяем значение done на противоположное
+                return { ...todo, done: !currentDone }; 
             }
             return todo;
         });
-
-        axios.put('http://localhost:3001/update/' + id)
+    
+        axios.put(`http://localhost:3001/update/${id}`, { done: !currentDone })
             .then(result => {
                 setTodos(updatedTodos);
             })
             .catch(err => console.log(err));
     }
+    
+    
 
     const handleDelete = (id) => {
-        axios.delete('http://localhost:3001/delete/' + id)
+        axios.delete(`http://localhost:3001/delete/${id}`)
             .then(result => {
                 const filteredTodos = todos.filter(todo => todo._id !== id);
                 setTodos(filteredTodos);
@@ -50,7 +53,7 @@ function Home() {
                 :
                 todos.map(todo => (
                     <div className="task" key={todo._id}>
-                        <div className='checkbox' onClick={() => handleEdit(todo._id)}>
+                        <div className='checkbox' onClick={() => handleEdit(todo._id, todo.done)}>
                             {todo.done ?
                                 <BsFillCheckCircleFill className="icon" />
                                 :
